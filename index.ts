@@ -472,6 +472,7 @@ class LList<T> {
   public first: Node<T> | null = null;
   public last: Node<T> | null = null;
   public listSize: number = 0;
+  public nodes:T[]= []
 
   constructor() {}
 
@@ -481,6 +482,7 @@ class LList<T> {
 
   insertFirst(element: T): void {
     const newNode = new Node(element);
+    this.nodes.push(newNode.item)
     if (this.isEmpty()) {
       this.first = this.last = newNode;
     } else {
@@ -492,6 +494,7 @@ class LList<T> {
 
   insertLast(element: T): void {
     const newNode = new Node(element);
+    this.nodes.push(newNode.item)
     if (this.isEmpty()) {
       this.first = this.last = newNode;
     } else {
@@ -506,14 +509,13 @@ class LList<T> {
       return `No such position`;
     }
 
-   
-
     if (pos === 0) {
       this.insertFirst(element);
     } else if (pos === this.listSize) {
       this.insertLast(element);
     } else {
       const newNode = new Node(element);
+      this.nodes.push(newNode.item)
       let currNode = this.first;
       for (let i = 1; i < pos; i++) {
         currNode = currNode!.next;
@@ -521,6 +523,48 @@ class LList<T> {
       newNode.next = currNode!.next;
       currNode!.next = newNode;
       this.listSize++;
+    }
+  }
+  removeFirst(): string | void {
+    if (this.isEmpty()) return "the list is empty!";
+    else if (this.listSize == 1) {
+      this.first = this.last = null;
+      this.listSize--;
+    } else {
+      this.first = this.first!.next;
+      this.listSize--;
+    }
+  }
+  removeLast() {
+    if (this.isEmpty()) return "the list is empty!";
+    else if (this.listSize == 1) {
+      this.first = this.last = null;
+      this.listSize--;
+    }
+    let curr = this.first;
+    while (curr?.next != this.last) {
+      curr = curr?.next!;
+    }
+    curr!.next = null;
+    this.last = curr;
+    this.listSize--;
+  }
+  removeWithKey(item: T):void|string {
+    if(!this.nodes.includes(item)){
+      //if the item is not in the list
+      console.error(`no such item in the linked list: ${item}`)
+      return `no such item in the linked list: ${item}`
+    }
+    let prev = this.first;
+    if (this.isEmpty()) return "the list is empty!";
+    else if (prev?.item == item) {
+      this.removeFirst();
+    } else {
+      while (prev?.next?.item != item) {
+        prev = prev!.next;
+      }
+      prev.next = prev.next.next;
+      this.listSize--;
     }
   }
 
@@ -535,9 +579,15 @@ class LList<T> {
 
 // Usage example
 const linkedList = new LList<number>();
-linkedList.insertFirst(10);
-linkedList.insertLast(30);
-linkedList.insertLast(40);
-linkedList.insertAtPos(1,50)
-linkedList.print(); // Output: 10 50 30 40
+linkedList.insertFirst(100);
+linkedList.insertFirst(100);
+linkedList.insertFirst(130);
+linkedList.insertFirst(140);
+linkedList.insertLast(150);
+linkedList.insertLast(160);
+linkedList.removeWithKey(100);
+linkedList.removeWithKey(140);
+linkedList.removeWithKey(1);
 
+linkedList.print(); // 120 100 150
+// console.log("the list size is: " + linkedList.listSize); // Output: 10 50 30 40
