@@ -472,7 +472,7 @@ class LList<T> {
   public first: Node<T> | null = null;
   public last: Node<T> | null = null;
   public listSize: number = 0;
-  public nodes:T[]= []
+  public nodes: T[] = [];
 
   constructor() {}
 
@@ -482,7 +482,7 @@ class LList<T> {
 
   insertFirst(element: T): void {
     const newNode = new Node(element);
-    this.nodes.push(newNode.item)
+    this.nodes.push(newNode.item);
     if (this.isEmpty()) {
       this.first = this.last = newNode;
     } else {
@@ -494,7 +494,7 @@ class LList<T> {
 
   insertLast(element: T): void {
     const newNode = new Node(element);
-    this.nodes.push(newNode.item)
+    this.nodes.push(newNode.item);
     if (this.isEmpty()) {
       this.first = this.last = newNode;
     } else {
@@ -515,7 +515,7 @@ class LList<T> {
       this.insertLast(element);
     } else {
       const newNode = new Node(element);
-      this.nodes.push(newNode.item)
+      this.nodes.push(newNode.item);
       let currNode = this.first;
       for (let i = 1; i < pos; i++) {
         currNode = currNode!.next;
@@ -549,11 +549,11 @@ class LList<T> {
     this.last = curr;
     this.listSize--;
   }
-  removeWithKey(item: T):void|string {
-    if(!this.nodes.includes(item)){
+  removeWithKey(item: T): void | string {
+    if (!this.nodes.includes(item)) {
       //if the item is not in the list
-      console.error(`no such item in the linked list: ${item}`)
-      return `no such item in the linked list: ${item}`
+      console.error(`no such item in the linked list: ${item}`);
+      return `no such item in the linked list: ${item}`;
     }
     let prev = this.first;
     if (this.isEmpty()) return "the list is empty!";
@@ -575,6 +575,28 @@ class LList<T> {
       curr = curr.next;
     }
   }
+  reverse() {
+    let curr = this.first;
+    let next = curr?.next;
+    let previous: null | Node<T> = null;
+    while (curr != null) {
+      next = curr.next; //    once operation done [✅]
+      curr.next = previous; //
+      previous = curr; //       move man[➡️]  قدم وحصلني
+      curr = next; //
+    }
+    this.first = previous;
+  }
+  search(item: T): number {
+    let curr = this.first;
+    let pos = 0;
+    while (curr != null) {
+      if (curr?.item == item) return pos;
+      curr = curr?.next;
+      pos++;
+    }
+    return -1;
+  }
 }
 
 // Usage example
@@ -585,9 +607,7 @@ linkedList.insertFirst(130);
 linkedList.insertFirst(140);
 linkedList.insertLast(150);
 linkedList.insertLast(160);
-linkedList.removeWithKey(100);
-linkedList.removeWithKey(140);
-linkedList.removeWithKey(1);
-
-linkedList.print(); // 120 100 150
+linkedList.reverse();
+linkedList.print();
+console.log(linkedList.search(1000)); // 120 100 150
 // console.log("the list size is: " + linkedList.listSize); // Output: 10 50 30 40
